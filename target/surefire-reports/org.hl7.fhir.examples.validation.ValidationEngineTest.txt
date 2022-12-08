@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.hl7.fhir.examples.validation.ValidationEngineTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.016 s <<< FAILURE! - in org.hl7.fhir.examples.validation.ValidationEngineTest
-org.hl7.fhir.examples.validation.ValidationEngineTest.validateWithUSCoreIGAndPatientProfile  Time elapsed: 0.002 s  <<< ERROR!
-java.lang.NullPointerException: Cannot invoke "java.net.URL.getFile()" because the return value of "java.lang.ClassLoader.getResource(String)" is null
-	at org.hl7.fhir.examples.validation.ValidationEngineTest.<init>(ValidationEngineTest.java:26)
-
