@@ -48,4 +48,4 @@ This project is maintained by [David Otasek][Link-davidGithub] on behalf of the 
 
 [Link-davidGithub]: https://github.com/dotasek
 [Link-GithubIssues]: https://github.com/dotasek/fhir-core-examples/issues
-[Link-GithubWiki]: https://github.com/dotasek/fhir-core-examples/issues
+[Link-GithubWiki]: https://github.com/dotasek/fhir-core-examples/wiki
