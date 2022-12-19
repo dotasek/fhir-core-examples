@@ -1,5 +1,7 @@
 package org.hl7.fhir.examples.validation;
 
+import org.hl7.fhir.examples.validation.test.ImplementationGuideMatcher;
+import org.hl7.fhir.examples.validation.test.IssueComponentMatcher;
 import org.hl7.fhir.r5.model.OperationOutcome;
 import org.hl7.fhir.validation.IgLoader;
 import org.hl7.fhir.validation.ValidationEngine;
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,41 +28,26 @@ public class ValidationEngineTest {
 
     final File usCoreConformantPatient = new File(classLoader.getResource("patient-uscore.json").getFile());
 
+    final String usCorePatientProfileUri = "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient";
+
     @Test
     @DisplayName("Build a validation engine, load necessary r5 extensions, add the US Core IG from a tgz, add the Patient profile and validate patient resources")
     void validateWithUSCoreIGAndPatientProfile() throws IOException, URISyntaxException {
 
-        final ValidationEngine validationEngine = ValidationEngineExamples.buildValidationEngine("4.0.1");
+        final ValidationEngineInitialization validationEngineInitialization = ValidationEngineInitialization.buildValidationEngine("4.0.1");
 
-        IgLoader igLoader = new IgLoader(
-                validationEngine.getPcm(),
-                validationEngine.getContext(),
-                validationEngine.getVersion(),
-                validationEngine.isDebug()
-        );
+        final ValidationEngine validationEngine = validationEngineInitialization.validationEngine;
+        final IgLoader igLoader = validationEngineInitialization.igLoader;
 
-        // Load the hl7.terminology package.
-        igLoader.loadIg(
-                validationEngine.getIgs(),
-                validationEngine.getBinaries(),
-                "hl7.terminology",
-                false
-        );
-
-        // Load the TGZ package.
-        igLoader.loadIg(
-                validationEngine.getIgs(),
-                validationEngine.getBinaries(),
-                packageTgz.getAbsolutePath(),
-                false
-        );
+        LoadIGs.loadIG(validationEngine,igLoader,packageTgz.getAbsolutePath());
 
         // Prepare the ValidationEngine.
         validationEngine.prepare();
 
         assertThat(validationEngine.getIgs(), hasItem(new ImplementationGuideMatcher("http://hl7.org/fhir/us/core/ImplementationGuide/hl7.fhir.us.core", "6.0.0-ballot")));
 
-        List<OperationOutcome> outcomeFailure = ValidationEngineExamples.validateFhirResource(nonUSCoreConformantPatient, validationEngine);
+        List<OperationOutcome> outcomeFailure = ValidateAResource.validateFhirResource(nonUSCoreConformantPatient, validationEngine,
+                List.of(usCorePatientProfileUri));
 
         assertEquals(1, outcomeFailure.size(), "Should have only one validation outcome.");
 
@@ -73,7 +61,7 @@ public class ValidationEngineTest {
                 new IssueComponentMatcher(OperationOutcome.IssueSeverity.ERROR, "Patient.name: minimum required = 1, but only found 0")
         ));
 
-        List<OperationOutcome> outcomeSuccess = ValidationEngineExamples.validateFhirResource(usCoreConformantPatient, validationEngine);
+        List<OperationOutcome> outcomeSuccess = ValidateAResource.validateFhirResource(usCoreConformantPatient, validationEngine, new ArrayList<String>());
 
         List<OperationOutcome.OperationOutcomeIssueComponent> successIssueComponents = outcomeSuccess.get(0).getIssue();
 

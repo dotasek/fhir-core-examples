@@ -1,4 +1,4 @@
-package org.hl7.fhir.examples.validation;
+package org.hl7.fhir.examples.validation.test;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
