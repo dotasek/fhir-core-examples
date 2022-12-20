@@ -13,7 +13,7 @@ Please maintain this README.md as a linkable document, as other documentation ma
 
 # fhir-core-examples
 
-Example code for programmatically accessing org.hl7.fhir.core functionality.
+Example code for programmatically accessing [org.hl7.fhir.core][Link-CoreLibraryGithub] functionality.
 
 A guide for using these examples is contained in the [wiki][Link-GithubWiki]
 
@@ -49,3 +49,4 @@ This project is maintained by [David Otasek][Link-davidGithub] on behalf of the 
 [Link-davidGithub]: https://github.com/dotasek
 [Link-GithubIssues]: https://github.com/dotasek/fhir-core-examples/issues
 [Link-GithubWiki]: https://github.com/dotasek/fhir-core-examples/wiki
+[Link-coreLibraryGithub]: https://github.com/hapifhir/org.hl7.fhir.core
