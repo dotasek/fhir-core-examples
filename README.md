@@ -25,7 +25,7 @@ This project uses [Java](https://www.java.com) (minumum version 11) and [Apache 
 
 ### Build Commands
 
-To build and add artifacts to your local Maven repository:
+To build this project:
 
 ```
 mvn install
