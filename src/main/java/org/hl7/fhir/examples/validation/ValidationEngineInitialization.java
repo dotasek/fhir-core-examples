@@ -53,10 +53,7 @@ public class ValidationEngineInitialization {
 
         validationEngine.setDebug(false);
         validationEngine.getContext().setLogger(new SystemOutLoggingService(false));
-
-        // Load the R5-extensions.
-        final R5ExtensionsLoader r5e = new R5ExtensionsLoader(validationEngine.getPcm(), validationEngine.getContext());
-        r5e.loadR5Extensions();
+        
 
         IgLoader igLoader = LoadIGs.getIGLoaderForEngine(validationEngine);
         LoadIGs.loadIG(validationEngine,igLoader,"hl7.terminology");
