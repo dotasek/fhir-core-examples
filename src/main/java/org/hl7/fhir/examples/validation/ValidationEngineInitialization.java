@@ -2,6 +2,7 @@ package org.hl7.fhir.examples.validation;
 
 import org.hl7.fhir.r5.conformance.R5ExtensionsLoader;
 import org.hl7.fhir.r5.context.SystemOutLoggingService;
+import org.hl7.fhir.utilities.FhirPublication;
 import org.hl7.fhir.utilities.TimeTracker;
 import org.hl7.fhir.utilities.VersionUtilities;
 import org.hl7.fhir.validation.IgLoader;
@@ -46,14 +47,15 @@ public class ValidationEngineInitialization {
 
         // Set the terminology server
         validationEngine.setTerminologyServer(
-                "http://tx.fhir.org",
+                "http://tx.fhir.org/r4",
                 null,
-                null
+                FhirPublication.R4
         );
 
         validationEngine.setDebug(false);
         validationEngine.getContext().setLogger(new SystemOutLoggingService(false));
-        
+        final R5ExtensionsLoader r5e = new R5ExtensionsLoader(validationEngine.getPcm(), validationEngine.getContext());
+        r5e.loadR5Extensions();
 
         IgLoader igLoader = LoadIGs.getIGLoaderForEngine(validationEngine);
         LoadIGs.loadIG(validationEngine,igLoader,"hl7.terminology");
