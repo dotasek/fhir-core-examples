@@ -48,7 +48,8 @@ public class ValidationEngineInitialization {
         validationEngine.setTerminologyServer(
                 "http://tx.fhir.org",
                 null,
-                null
+                null,
+                false
         );
 
         validationEngine.setDebug(false);
