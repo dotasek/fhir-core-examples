@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hamcrest-library.version>2.2</hamcrest-library.version>
         <okhttp.version>4.9.3</okhttp.version>
-        <org.hl7.fhir.core.version>6.0.15</org.hl7.fhir.core.version>
+        <org.hl7.fhir.core.version>6.3.11</org.hl7.fhir.core.version>
     </properties>
 
     <dependencies>

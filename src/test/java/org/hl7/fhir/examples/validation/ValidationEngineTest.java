@@ -1,8 +1,8 @@
 package org.hl7.fhir.examples.validation;
 
-import org.hl7.fhir.examples.validation.test.ImplementationGuideMatcher;
 import org.hl7.fhir.examples.validation.test.IssueComponentMatcher;
 import org.hl7.fhir.r5.model.OperationOutcome;
+import org.hl7.fhir.r5.utils.EOperationOutcome;
 import org.hl7.fhir.validation.IgLoader;
 import org.hl7.fhir.validation.ValidationEngine;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +17,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
+import static  org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ValidationEngineTest {
@@ -32,19 +33,21 @@ public class ValidationEngineTest {
 
     @Test
     @DisplayName("Build a validation engine, load necessary r5 extensions, add the US Core IG from a tgz, add the Patient profile and validate patient resources")
-    void validateWithUSCoreIGAndPatientProfile() throws IOException, URISyntaxException {
+    void validateWithUSCoreIGAndPatientProfile() throws IOException, URISyntaxException, EOperationOutcome {
 
         final ValidationEngineInitialization validationEngineInitialization = ValidationEngineInitialization.buildValidationEngine("4.0.1");
 
         final ValidationEngine validationEngine = validationEngineInitialization.validationEngine;
         final IgLoader igLoader = validationEngineInitialization.igLoader;
 
+
+
         LoadIGs.loadIG(validationEngine,igLoader,packageTgz.getAbsolutePath());
 
         // Prepare the ValidationEngine.
         validationEngine.prepare();
 
-        assertThat(validationEngine.getIgs(), hasItem(new ImplementationGuideMatcher("http://hl7.org/fhir/us/core/ImplementationGuide/hl7.fhir.us.core", "6.0.0-ballot")));
+        assertThat(validationEngine.getContext().getLoadedPackages(), hasItem("hl7.fhir.us.core#6.0.0-ballot"));
 
         List<OperationOutcome> outcomeFailure = ValidateAResource.validateFhirResource(nonUSCoreConformantPatient, validationEngine,
                 List.of(usCorePatientProfileUri));

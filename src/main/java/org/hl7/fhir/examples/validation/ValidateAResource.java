@@ -1,11 +1,15 @@
 package org.hl7.fhir.examples.validation;
 
+import org.hl7.fhir.r5.elementmodel.Manager;
+import org.hl7.fhir.r5.model.BaseResource;
 import org.hl7.fhir.r5.model.Bundle;
 import org.hl7.fhir.r5.model.OperationOutcome;
 import org.hl7.fhir.r5.model.Resource;
+import org.hl7.fhir.r5.utils.EOperationOutcome;
 import org.hl7.fhir.validation.ValidationEngine;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,15 +36,11 @@ public class ValidateAResource {
             final File fhirResourceFile,
             final ValidationEngine validationEngine,
             List<String> profiles
-    ) throws IOException {
+    ) throws IOException, EOperationOutcome {
 
 
         // Call the validation logic.
-        final Resource resource = validationEngine.validate(
-                List.of(fhirResourceFile.getAbsolutePath()),
-                profiles,
-                null
-        );
+        final BaseResource resource = validationEngine.validate(Manager.FhirFormat.JSON, new FileInputStream(fhirResourceFile), profiles);
 
         final List<OperationOutcome> operationOutcomes = new ArrayList<>();
 
