@@ -19,7 +19,6 @@
         <maven.compiler.testTarget>11</maven.compiler.testTarget>
         <junit-jupiter.version>5.9.0</junit-jupiter.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hamcrest-library.version>2.2</hamcrest-library.version>
         <okhttp.version>4.9.3</okhttp.version>
         <org.hl7.fhir.core.version>6.3.11</org.hl7.fhir.core.version>
     </properties>
@@ -48,9 +47,9 @@
 
         <!-- hamcrest assertions and matchers -->
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version>${hamcrest-library.version}</version>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.22.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -1,6 +1,7 @@
 package org.hl7.fhir.examples.validation;
 
-import org.hl7.fhir.examples.validation.test.IssueComponentMatcher;
+import org.hl7.fhir.examples.validation.test.IssueComponentRegexTextComparator;
+import org.hl7.fhir.r5.model.CodeableConcept;
 import org.hl7.fhir.r5.model.OperationOutcome;
 import org.hl7.fhir.r5.utils.EOperationOutcome;
 import org.hl7.fhir.validation.IgLoader;
@@ -14,10 +15,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static  org.hamcrest.core.IsNot.not;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ValidationEngineTest {
@@ -47,7 +45,7 @@ public class ValidationEngineTest {
         // Prepare the ValidationEngine.
         validationEngine.prepare();
 
-        assertThat(validationEngine.getContext().getLoadedPackages(), hasItem("hl7.fhir.us.core#6.0.0-ballot"));
+        assertThat(validationEngine.getContext().getLoadedPackages()).contains("hl7.fhir.us.core#6.0.0-ballot");
 
         List<OperationOutcome> outcomeFailure = ValidateAResource.validateFhirResource(nonUSCoreConformantPatient, validationEngine,
                 List.of(usCorePatientProfileUri));
@@ -58,11 +56,11 @@ public class ValidationEngineTest {
 
         assertEquals(3, countIssuesOfSeverity(failureIssueComponents, OperationOutcome.IssueSeverity.ERROR), "Should have 3 errors");
 
-        assertThat(failureIssueComponents, hasItems(
-                new IssueComponentMatcher(OperationOutcome.IssueSeverity.ERROR, "Patient.gender: minimum required = 1, but only found 0"),
-                new IssueComponentMatcher(OperationOutcome.IssueSeverity.ERROR, "Patient.identifier: minimum required = 1, but only found 0"),
-                new IssueComponentMatcher(OperationOutcome.IssueSeverity.ERROR, "Patient.name: minimum required = 1, but only found 0")
-        ));
+        assertThat(failureIssueComponents).usingElementComparator(new IssueComponentRegexTextComparator()).contains(
+                createComparableIssue(OperationOutcome.IssueSeverity.ERROR, "Patient.gender: minimum required = 1, but only found 0"),
+                createComparableIssue(OperationOutcome.IssueSeverity.ERROR, "Patient.identifier: minimum required = 1, but only found 0"),
+                createComparableIssue(OperationOutcome.IssueSeverity.ERROR, "Patient.name: minimum required = 1, but only found 0")
+        );
 
         List<OperationOutcome> outcomeSuccess = ValidateAResource.validateFhirResource(usCoreConformantPatient, validationEngine, new ArrayList<String>());
 
@@ -70,6 +68,13 @@ public class ValidationEngineTest {
 
         assertEquals(0, countIssuesOfSeverity(successIssueComponents, OperationOutcome.IssueSeverity.ERROR), "Should have no errors");
 
+    }
+
+    private OperationOutcome. OperationOutcomeIssueComponent createComparableIssue(OperationOutcome.IssueSeverity severity, String text) {
+        OperationOutcome.OperationOutcomeIssueComponent issueComponent = new OperationOutcome.OperationOutcomeIssueComponent();
+        issueComponent.setSeverity(severity);
+        issueComponent.setDetails(new CodeableConcept().setText(text));
+        return issueComponent;
     }
 
     private int countIssuesOfSeverity( List<OperationOutcome.OperationOutcomeIssueComponent> issueComponents, OperationOutcome.IssueSeverity severity){
