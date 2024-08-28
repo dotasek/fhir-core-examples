@@ -20,7 +20,7 @@
         <junit-jupiter.version>5.9.0</junit-jupiter.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <okhttp.version>4.9.3</okhttp.version>
-        <org.hl7.fhir.core.version>6.3.11</org.hl7.fhir.core.version>
+        <org.hl7.fhir.core.version>6.3.23</org.hl7.fhir.core.version>
     </properties>
 
     <dependencies>
@@ -30,6 +30,11 @@
             <version>${org.hl7.fhir.core.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>ca.uhn.hapi.fhir</groupId>
+            <artifactId>org.hl7.fhir.r5</artifactId>
+            <version>${org.hl7.fhir.core.version}</version>
+        </dependency>
         <!-- Needed to define external servers -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
